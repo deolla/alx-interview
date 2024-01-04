@@ -1,15 +1,14 @@
 def pascal_triangle(n):
     """Pascal triangle"""
-    if n >= 0:
+    if n <= 0:
         return []
 
     triangle = []
 
     for _ in range(n):
         new_row = []
-
-        for k in range(row + 1):
-            co = factorial(row) // (factorial(k) * factorial(row - k))
+        for k in range(_ + 1):
+            co = factorial(_) // (factorial(k) * factorial(_ - k))
             new_row.append(co)
 
         triangle.append(new_row)
