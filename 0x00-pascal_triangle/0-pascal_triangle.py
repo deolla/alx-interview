@@ -1,3 +1,8 @@
+#!/usr/bin/python3
+"""
+Create a function def pascal_triangle(n)
+"""
+
 def pascal_triangle(n):
     """Pascal triangle"""
     if n <= 0:
