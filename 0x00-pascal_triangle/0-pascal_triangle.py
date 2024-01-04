@@ -3,6 +3,7 @@
 Create a function def pascal_triangle(n)
 """
 
+
 def pascal_triangle(n):
     """Pascal triangle"""
     if n <= 0:
@@ -19,6 +20,7 @@ def pascal_triangle(n):
         triangle.append(new_row)
 
     return triangle
+
 
 def factorial(num):
     """Calculate the factorial of a number."""
