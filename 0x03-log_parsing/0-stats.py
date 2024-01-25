@@ -1,52 +1,39 @@
 #!/usr/bin/python3
-"""
-Log parsing
-"""
+"""log parsing"""
 import sys
 
 
-def print_metrics(file_size, status_codes):
-    """
-    Print metrics
-    """
-    print("File size: {}".format(file_size))
-    codes_sorted = sorted(status_codes.keys())
-    for code in codes_sorted:
-        if status_codes[code] > 0:
-            print("{}: {}".format(code, status_codes[code]))
+def print_stats(total_size, status_codes):
+    print("File size: {}".format(total_size))
+    for code in sorted(status_codes):
+        print("{}: {}".format(code, status_codes[code]))
 
 
-codes_count = {
-    "200": 0,
-    "301": 0,
-    "400": 0,
-    "401": 0,
-    "403": 0,
-    "404": 0,
-    "405": 0,
-    "500": 0,
-}
-file_size_total = 0
-count = 0
+def main():
+    total_size = 0
+    status_codes = {}
+
+    try:
+        for i, line in enumerate(sys.stdin, 1):
+            try:
+                parts = line.split()
+                ip, date, method, path, version, status_code, file_size = parts[:7]
+                file_size = int(file_size)
+            except (ValueError, IndexError):
+                # Skip invalid lines
+                continue
+
+            total_size += file_size
+            status_codes[status_code] = status_codes.get(status_code, 0) + 1
+
+            if i % 10 == 0:
+                print_stats(total_size, status_codes)
+
+    except KeyboardInterrupt:
+        pass  # Continue to print final stats even if interrupted
+
+    print_stats(total_size, status_codes)
+
 
 if __name__ == "__main__":
-    try:
-        for line in sys.stdin:
-            try:
-                status_code = line.split()[-2]
-                if status_code in codes_count.keys():
-                    codes_count[status_code] += 1
-                # Grab file size
-                file_size = int(line.split()[-1])
-                file_size_total += file_size
-            except Exception:
-                pass
-            # print metrics if 10 lines have been read
-            count += 1
-            if count == 10:
-                print_metrics(file_size_total, codes_count)
-                count = 0
-    except KeyboardInterrupt:
-        print_metrics(file_size_total, codes_count)
-        raise
-print_metrics(file_size_total, codes_count)
+    main()
