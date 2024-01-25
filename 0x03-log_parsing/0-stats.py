@@ -12,30 +12,35 @@ def print_stats(file_size, status_codes):
             print("{}: {}".format(key, status_codes[key]))
 
 
-if __name__ == "__main__":
-    file_size = 0
-    status_codes = {
-        "200": 0,
-        "301": 0,
-        "400": 0,
-        "401": 0,
-        "403": 0,
-        "404": 0,
-        "405": 0,
-        "500": 0,
-    }
+counter = 0
+file_size = 0
+status_codes = {
+    "200": 0,
+    "301": 0,
+    "400": 0,
+    "401": 0,
+    "403": 0,
+    "404": 0,
+    "405": 0,
+    "500": 0,
+}
 
+if __name__ == "__main__":
     try:
-        for i, line in enumerate(sys.stdin, 1):
+        for line in sys.stdin:
+            counter += 1
+            parsed = line.split()
             try:
-                line = line.split()
-                file_size += int(line[-1])
-                status_codes[line[-2]] += 1
+                file_size += int(parsed[-1])
             except Exception:
                 pass
-            if i % 10 == 0:
+            try:
+                status_codes[parsed[-2]] += 1
+            except Exception:
+                pass
+            if counter % 10 == 0:
                 print_stats(file_size, status_codes)
+        print_stats(file_size, status_codes)
     except KeyboardInterrupt:
         print_stats(file_size, status_codes)
         raise
-    print_stats(file_size, status_codes)
