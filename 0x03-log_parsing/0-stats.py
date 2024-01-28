@@ -1,11 +1,12 @@
 #!/usr/bin/python3
-"""Log parsing
+"""This script reads lines from stdin in this format
 <IP Address> - [<date>] "GET /projects/260 HTTP/1.1" <status code> <file size>
 and after every 10 lines or keyboard interruption
 it prints File size: <total size>
-"""
+<status code>: <number> for every status code"""
 
 from sys import stdin
+
 
 try:
     my_dict = {}
@@ -21,16 +22,14 @@ try:
                 my_dict[status] += 1
         except (ValueError, IndexError):
             continue
-
+        my_dict = dict(sorted(my_dict.items()))
         if i % 10 == 0:
             print("File size: {}".format(total_size))
-            for key, val in sorted(my_dict.items()):
+            for key, val in my_dict.items():
                 print("{}: {}".format(key, val))
-
 except KeyboardInterrupt:
     pass
-
 finally:
     print("File size: {}".format(total_size))
-    for key, val in sorted(my_dict.items()):
+    for key, val in my_dict.items():
         print("{}: {}".format(key, val))
