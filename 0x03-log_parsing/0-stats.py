@@ -18,7 +18,7 @@ try:
                 codes[status] += 1
         except (ValueError, IndexError):
             continue
-
+        # codes = dict(sorted(codes.items()))
         if i % 10 == 0:
             print("File size: {}".format(total_size))
             for key, val in sorted(codes.items()):
