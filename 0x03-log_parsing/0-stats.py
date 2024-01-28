@@ -1,5 +1,9 @@
 #!/usr/bin/python3
-"""Log parsing"""
+"""Log parsing
+<IP Address> - [<date>] "GET /projects/260 HTTP/1.1" <status code> <file size>
+and after every 10 lines or keyboard interruption
+it prints File size: <total size>
+"""
 
 from sys import stdin
 
