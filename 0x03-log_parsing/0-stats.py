@@ -3,46 +3,34 @@
 import sys
 
 
-def print_stats(status_codes, file_size):
-    """"""
-    print("File size: {}".format(file_size))
-    for key, value in sorted(status_codes.items()):
-        if value:
-            print("{}: {}".format(key, value))
+if __name__ == "__main__":
+    filesize, count = 0, 0
+    codes = ["200", "301", "400", "401", "403", "404", "405", "500"]
+    stats = {k: 0 for k in codes}
 
+    def print_stats(stats, file_size):
+        print("File size: {:d}".format(file_size))
+        for k, v in sorted(stats.items()):
+            if v:
+                print("{}: {}".format(k, v))
 
-def main():
-    """"""
-    status_codes = {
-        "200": 0,
-        "301": 0,
-        "400": 0,
-        "401": 0,
-        "403": 0,
-        "404": 0,
-        "405": 0,
-        "500": 0,
-    }
-    file_size = 0
-    counter = 0
     try:
         for line in sys.stdin:
-            counter += 1
+            count += 1
             data = line.split()
             try:
-                file_size += int(data[-1])
-            except:
-                pass
+                status_code = data[-2]
+                if status_code in stats:
+                    stats[status_code] += 1
+            except BaseException:
+                continue
             try:
-                status_codes[data[-2]] += 1
-            except:
-                pass
-            if counter % 10 == 0:
-                print_stats(status_codes, file_size)
+                filesize += int(data[-1])
+            except BaseException:
+                continue
+            if count % 10 == 0:
+                print_stats(stats, filesize)
+        print_stats(stats, filesize)
     except KeyboardInterrupt:
-        print_stats(status_codes, file_size)
-        raise
-
-
-if __name__ == "__main__":
-    main()
+        print_stats(stats, filesize)
+        sys.exit(0)
