@@ -3,7 +3,7 @@
 import sys
 
 
-def backtrack(r, n, cols, pos, neg, board):
+def backtrack(r, n, pop, pos, neg, board):
     """A program that solves the N queens problem."""
     if r == n:
         res = []
@@ -14,21 +14,21 @@ def backtrack(r, n, cols, pos, neg, board):
         print(res)
         return
 
-    for c in range(n):
-        if c in cols or (r + c) in pos or (r - c) in neg:
+    for h in range(n):
+        if h in pop or (r + h) in pos or (r - h) in neg:
             continue
 
-        cols.add(c)
-        pos.add(r + c)
-        neg.add(r - c)
-        board[r][c] = 1
+        pop.add(h)
+        pos.add(r + h)
+        neg.add(r - h)
+        board[r][h] = 1
 
-        backtrack(r + 1, n, cols, pos, neg, board)
+        backtrack(r + 1, n, pop, pos, neg, board)
 
-        cols.remove(c)
-        pos.remove(r + c)
-        neg.remove(r - c)
-        board[r][c] = 0
+        pop.remove(h)
+        pos.remove(r + h)
+        neg.remove(r - h)
+        board[r][h] = 0
 
 
 def nqueens(n):
@@ -36,12 +36,12 @@ def nqueens(n):
     The program should print every possible solution to
     the problem One solution per line.
     """
-    cols = set()
+    pop = set()
     pos_diag = set()
     neg_diag = set()
     board = [[0] * n for i in range(n)]
 
-    backtrack(0, n, cols, pos_diag, neg_diag, board)
+    backtrack(0, n, pop, pos_diag, neg_diag, board)
 
 
 if __name__ == "__main__":
