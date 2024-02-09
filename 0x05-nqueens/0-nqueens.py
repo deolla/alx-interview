@@ -4,14 +4,18 @@ import sys
 
 
 def is_safe(board, row, col, N):
+    """Check if a queen can be placed on board[row][col]"""
     # Check if there is a queen in the same column
     for i in range(row):
-        if board[i] == col or board[i] - i == col - row or board[i] + i == col + row:
+        if (board[i] == col) or \
+           (board[i] - i == col - row) or \
+           (board[i] + i == col + row):
             return False
     return True
 
 
 def solve_nqueens(board, row, N):
+    """Solve N queens problem"""
     if row == N:
         print_solution(board)
         return
@@ -23,10 +27,12 @@ def solve_nqueens(board, row, N):
 
 
 def print_solution(board):
+    """Print the solution"""
     print([[i, board[i]] for i in range(len(board))])
 
 
 def nqueens(N):
+    """N queens problem"""
     if not N.isdigit():
         print("N must be a number")
         sys.exit(1)
