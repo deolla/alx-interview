@@ -6,13 +6,17 @@ def makeChange(coins, total):
     if total <= 0:
         return 0
 
-    dp = [float('inf')] * (total + 1)
-    dp[0] = 0  # Base case: 0 coins needed for amount 0
+    # Sort the coins in descending order
+    coins.sort(reverse=True)
 
-    # Iterate through each coin denomination
-    for coin in coins:
-        # Update dp array for each amount starting from coin value
-        for amount in range(coin, total + 1):
-            dp[amount] = min(dp[amount], dp[amount - coin] + 1)
+    num_coins = 0
+    i = 0
 
-    return dp[total] if dp[total] != float('inf') else -1
+    while total > 0 and i < len(coins):
+        if coins[i] <= total:
+            # Use as many coins of the largest denomination as possible
+            num_coins += total // coins[i]
+            total %= coins[i]
+        i += 1
+
+    return num_coins if total == 0 else -1
