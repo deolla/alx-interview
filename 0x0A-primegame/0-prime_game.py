@@ -2,113 +2,65 @@
 """Prime Game."""
 
 
-def isWinner(x, nums):
-    """
-    Determine the winner of each game.
+def generate_primes(limit):
+    """Generate a list of prime numbers."""
+    primes = [True] * (limit + 1)
+    primes[0] = primes[1] = False
 
-    Args:
-    - x: Number of rounds.
-    - nums: List of integers representing the upper bounds for each round.
+    for i in range(2, int(limit**0.5) + 1):
+        if primes[i]:
+            for j in range(i * i, limit + 1, i):
+                primes[j] = False
 
-    Returns:
-    - Name of the player that won the most rounds.
-    - If the winner cannot be determined, return None.
-    """
-    def is_prime(num):
-        """
-        Check if a number is prime.
+    return [num for num, is_prime in enumerate(primes) if is_prime]
 
-        Args:
-        - num: The number to check.
 
-        Returns:
-        - True if the number is prime, False otherwise.
-        """
-        if num < 2:
+def is_prime(num):
+    """Check if a number is prime."""
+    if num < 2:
+        return False
+    for i in range(2, int(num**0.5) + 1):
+        if num % i == 0:
             return False
-        for i in range(2, int(num ** 0.5) + 1):
-            if num % i == 0:
-                return False
-        return True
+    return True
 
-    def get_primes_up_to_n(n):
-        """
-        Get a list of prime numbers up to a given value.
 
-        Args:
-        - n: The upper bound for prime numbers.
+def play_round(n):
+    """Play a round of the prime game."""
+    primes = generate_primes(n)
+    player = 'Maria'
 
-        Returns:
-        - List of prime numbers.
-        """
-        primes = []
-        for i in range(2, n + 1):
-            if is_prime(i):
-                primes.append(i)
-        return primes
+    while True:
+        valid_moves = [prime for prime in primes if prime <= n]
+        
+        if not valid_moves:
+            return 'Ben' if player == 'Maria' else 'Maria'
+        
+        if player == 'Maria':
+            chosen_num = min(valid_moves)
+        else:
+            chosen_num = max(valid_moves)
 
-    def can_remove_number(nums, num):
-        """
-        Check if a given number and its multiples can be removed from the list.
+        primes = [num for num in primes if num % chosen_num != 0]
+        n -= chosen_num
+        player = 'Ben' if player == 'Maria' else 'Maria'
 
-        Args:
-        - nums: The list of numbers.
-        - num: The number to check.
-
-        Returns:
-        - True if the number can be removed, False otherwise.
-        """
-        for i in range(num, len(nums), num):
-            if nums[i] != -1:
-                return True
-        return False
-
-    def remove_multiples(nums, num):
-        """
-        Remove multiples of a given number from the list.
-
-        Args:
-        - nums: The list of numbers.
-        - num: The number whose multiples should be removed.
-        """
-        for i in range(num, len(nums), num):
-            nums[i] = -1
-
-    def play_round(nums):
-        """
-        Play a round of the game.
-
-        Args:
-        - nums: The list of numbers for the current round.
-
-        Returns:
-        - True if a move was made, False otherwise.
-        """
-        primes = get_primes_up_to_n(max(nums))
-        for prime in primes:
-            if can_remove_number(nums, prime):
-                remove_multiples(nums, prime)
-                return True
-        return False
-
-    maria_wins = 0
-    ben_wins = 0
+def isWinner(x, nums):
+    maria_wins = ben_wins = 0
 
     for n in nums:
-        nums_list = list(range(1, n + 1))
-        round_number = 0
+        primes = generate_primes(n)
+        prime_count = len(primes)
 
-        while play_round(nums_list):
-            round_number += 1
-
-        if round_number % 2 == 0:
+        if prime_count % 2 == 0:
             ben_wins += 1
         else:
             maria_wins += 1
 
     if maria_wins > ben_wins:
-        return "Maria"
-    elif maria_wins < ben_wins:
-        return "Ben"
+        return 'Maria'
+    elif ben_wins > maria_wins:
+        return 'Ben'
     else:
         return None
+    
