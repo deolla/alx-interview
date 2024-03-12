@@ -3,7 +3,7 @@
 
 
 def isWinner(x, nums):
-    """Determines the winner of each game and returns the name of the player."""
+    """Determines the winner of each game, returns the name of the player."""
     def sieve(n):
         """Implements the Sieve of Eratosthenes algorithm."""
         primes = [True] * (n + 1)
