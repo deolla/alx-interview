@@ -32,10 +32,10 @@ def play_round(n):
 
     while True:
         valid_moves = [prime for prime in primes if prime <= n]
-        
+
         if not valid_moves:
             return 'Ben' if player == 'Maria' else 'Maria'
-        
+
         if player == 'Maria':
             chosen_num = min(valid_moves)
         else:
@@ -45,7 +45,9 @@ def play_round(n):
         n -= chosen_num
         player = 'Ben' if player == 'Maria' else 'Maria'
 
+
 def isWinner(x, nums):
+    """Determine the winner of each round."""
     maria_wins = ben_wins = 0
 
     for n in nums:
@@ -63,4 +65,3 @@ def isWinner(x, nums):
         return 'Ben'
     else:
         return None
-    
